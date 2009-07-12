@@ -1,0 +1,13 @@
+#summary Quick guide to installing Live Style.
+
+=Installation Guide=
+  # Add a reference to the LiveStyle DLL from your ASP.NET web project.
+  # Add this handler to your web.config `<add verb="*" path="LiveStyle.ashx" type="LiveStyle.LiveStyleHandler, LiveStyle"/>`
+  # Run your web site
+  # Navigate to `/livestyle.ashx?install`
+  # Add the Live Style bookmarklet to your favorites/bookmarks (using the right click menu usually)
+
+Now when on a page in your site, run the bookmarklet. This injects a script into your page and opens the Live Style editor window.
+
+You will probably need to disable your pop-up blocker temporarily.
+
