@@ -11,3 +11,15 @@ Now when on a page in your site, run the bookmarklet. This injects a script into
 
 You will probably need to disable your pop-up blocker temporarily.
 
+==Security==
+
+To stop anonymous access to LiveStyle, either remove it from your production web.config, or add:
+{{{
+  <location path="~/livestyle.ashx">
+    <system.web>
+      <authorization>
+        <deny users="?"/>
+      </authorization>
+    </system.web>
+  </location>
+}}}
