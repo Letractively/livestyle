@@ -12,6 +12,7 @@ function addStylesheetsToSelect() {
     var links = $('link[type=text/css]', window.opener.document);
     links.each(function() {
         var href = $(this).attr('href');
+        if (/^http(s?)\:/.exec(href)) return; // skip absolute URLs
         var q = href.indexOf('?');
         if (q >= 0) {
             href = href.substr(0, q);
