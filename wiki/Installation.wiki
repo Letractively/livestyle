@@ -3,7 +3,7 @@
   # Add a reference to the LiveStyle DLL from your ASP.NET web project.
   # Add this handler to your web.config `<add verb="*" path="LiveStyle.ashx" type="LiveStyle.LiveStyleHandler, LiveStyle"/>`
   # Run your web site
-  # Navigate to `/livestyle.ashx?install`
+  # Navigate to `/livestyle.ashx`
   # Add the Live Style bookmarklet to your favorites/bookmarks (using the right click menu usually)
 
 ==Starting LiveStyle==
