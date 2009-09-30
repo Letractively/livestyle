@@ -14,69 +14,114 @@ namespace LiveStyle
 
         public void ProcessRequest(HttpContext context)
         {
-            var liveStyleHandlerPath = context.Request.ApplicationPath.TrimEnd('/') + context.Request.AppRelativeCurrentExecutionFilePath.Substring(1);
-
-            if (context.Request.Url.Query == "")
-            {
-                context.Response.Write(targetJs.Replace("$path", liveStyleHandlerPath));
-                return;
-            }
-            if (context.Request.Url.Query == "?editor.js")
-            {
-                context.Response.Write(editorJs);
-                return;
-            }
-            if (context.Request.Url.Query == "?editor.htm")
-            {
-                var html = editorHtmlTemplate.Replace("$js", liveStyleHandlerPath + "?editor.js");
-                context.Response.Write(html);
-                return;
-            }
-            if (context.Request.Url.Query == "?install")
-            {
-                context.Response.Write(installHtml.Replace("$path", liveStyleHandlerPath));
-                return;
-            }
-
+            var resourceName = context.Request.QueryString["resource"];
             var cssFilename = context.Request.QueryString["file"];
-            if (string.IsNullOrEmpty(cssFilename)) return;
 
-            cssFilename = cssFilename.Substring(context.Request.ApplicationPath.TrimEnd('/').Length);
-
-            var isPost = context.Request.HttpMethod.Equals("post", StringComparison.OrdinalIgnoreCase);
-
-            if (isPost)
+            if (resourceName != null)
             {
-                using (var reader = new StreamReader(context.Request.InputStream))
-                {
-                    var css = reader.ReadToEnd();
-                    File.WriteAllText(context.Server.MapPath("~/" + cssFilename), css);
-                }
+                OutputResource(context, resourceName);
+            }
+            else if (cssFilename != null)
+            {
+                ProcessCssRequest(context, cssFilename);
             }
             else
             {
-                context.Response.TransmitFile(context.Server.MapPath("~/" + cssFilename));
-            }            
+                OutputResource(context, "install.htm");
+            }
         }
 
-        static readonly string editorHtmlTemplate;
-        static readonly string targetJs;
-        static readonly string editorJs;
-        static readonly string installHtml;
-
-        static LiveStyleHandler()
+        static void ProcessCssRequest(HttpContext context, string cssFilename)
         {
-            using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("LiveStyle.editor.htm")))
-                editorHtmlTemplate = reader.ReadToEnd();
+            cssFilename = cssFilename.Substring(context.Request.ApplicationPath.TrimEnd('/').Length);
 
-            using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("LiveStyle.target.js")))
-                targetJs = reader.ReadToEnd();
+            if (IsPost(context))
+            {
+                SaveCssFile(context, cssFilename);
+            }
+            else
+            {
+                OutputCssFile(context, cssFilename);
+            }
+        }
 
-            using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("LiveStyle.editor.js")))
-                editorJs = reader.ReadToEnd();
+        static bool IsPost(HttpContext context)
+        {
+            return context.Request.HttpMethod.Equals("post", StringComparison.OrdinalIgnoreCase);
+        }
 
-            using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("LiveStyle.install.htm")))
-                installHtml = reader.ReadToEnd();
+        static void SaveCssFile(HttpContext context, string cssFilename)
+        {
+            using (var reader = new StreamReader(context.Request.InputStream))
+            {
+                var css = reader.ReadToEnd();
+                File.WriteAllText(context.Server.MapPath("~/" + cssFilename), css);
+            }
+        }
+
+        static void OutputCssFile(HttpContext context, string cssFilename)
+        {
+            var filename = context.Server.MapPath("~/" + cssFilename);
+            if (File.Exists(filename))
+            {
+                context.Response.TransmitFile(filename);
+            }
+            else
+            {
+                NotFound(context);
+            }
+        }
+
+        static void NotFound(HttpContext context)
+        {
+            context.Response.StatusCode = 404;
+        }
+
+        static void OutputResource(HttpContext context, string resourceName)
+        {
+            var liveStyleHandlerPath = context.Request.ApplicationPath.TrimEnd('/') + context.Request.AppRelativeCurrentExecutionFilePath.Substring(1);
+            resourceName = "LiveStyle." + resourceName.Replace('/', '.');
+            try
+            {
+                var resource = ReadResource(resourceName);
+                resource = ReplacePathPlaceholder(resourceName, resource, liveStyleHandlerPath);
+                SetContentType(context, resourceName);
+                context.Response.Write(resource);
+            }
+            catch
+            {
+                NotFound(context);
+            }
+        }
+
+        static string ReplacePathPlaceholder(string resourceName, string resource, string liveStyleHandlerPath)
+        {
+            if (resourceName == "LiveStyle.target.js"
+             || resourceName == "LiveStyle.install.htm"
+             || resourceName == "LiveStyle.editor.htm"
+             || resourceName == "LiveStyle.editor.js")
+            {
+                resource = resource.Replace("$path", liveStyleHandlerPath);
+            }
+            return resource;
+        }
+
+        static string ReadResource(string resourceName)
+        {
+            using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName)))
+                return reader.ReadToEnd();
+        }
+
+        static void SetContentType(HttpContext context, string resourceName)
+        {
+            if (resourceName.EndsWith(".htm", StringComparison.OrdinalIgnoreCase))
+                context.Response.ContentType = "text/html";
+
+            else if (resourceName.EndsWith(".js", StringComparison.OrdinalIgnoreCase))
+                context.Response.ContentType = "text/javascript";
+
+            else if (resourceName.EndsWith(".css", StringComparison.OrdinalIgnoreCase))
+                context.Response.ContentType = "text/css";
         }
     }
 }

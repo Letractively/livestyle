@@ -57,8 +57,28 @@
     <EmbeddedResource Include="target.js" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CodeMirror\css\csscolors.css" />
+    <EmbeddedResource Include="CodeMirror\js\codemirror.js" />
+    <EmbeddedResource Include="CodeMirror\js\editor.js" />
+    <EmbeddedResource Include="CodeMirror\js\highlight.js" />
+    <EmbeddedResource Include="CodeMirror\js\mirrorframe.js" />
+    <EmbeddedResource Include="CodeMirror\js\parsecss.js" />
+    <EmbeddedResource Include="CodeMirror\js\parsedummy.js" />
+    <EmbeddedResource Include="CodeMirror\js\parsehtmlmixed.js" />
+    <EmbeddedResource Include="CodeMirror\js\parsejavascript.js" />
+    <EmbeddedResource Include="CodeMirror\js\parsesparql.js" />
+    <EmbeddedResource Include="CodeMirror\js\parsexml.js" />
+    <EmbeddedResource Include="CodeMirror\js\select.js" />
+    <EmbeddedResource Include="CodeMirror\js\stringstream.js" />
+    <EmbeddedResource Include="CodeMirror\js\tokenize.js" />
+    <EmbeddedResource Include="CodeMirror\js\tokenizejavascript.js" />
+    <EmbeddedResource Include="CodeMirror\js\undo.js" />
+    <EmbeddedResource Include="CodeMirror\js\util.js" />
     <Content Include="favorite.txt" />
     <EmbeddedResource Include="install.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CodeMirror\LICENSE" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

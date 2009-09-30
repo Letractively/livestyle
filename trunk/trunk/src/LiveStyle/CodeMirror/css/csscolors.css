@@ -1,0 +1,51 @@
+.editbox {
+  margin: .4em;
+  padding: 0;
+  font-family: Consolas, 'Lucida Console', 'Courier New', monospace;
+  font-size: 10pt;
+  color: black;
+}
+
+pre.code, .editbox {
+  color: #666666;
+}
+
+.editbox p {
+  margin: 0;
+}
+
+span.css-at {
+  color: #770088;
+}
+
+span.css-unit {
+  color: #00f;
+}
+
+span.css-value {
+  color: #00f;
+}
+
+span.css-identifier {
+  color: #800;
+}
+
+span.css-property {
+  color: Red;
+}
+
+span.css-important {
+  color: #0000FF;
+}
+
+span.css-colorcode {
+  color: #00f;
+}
+
+span.css-comment {
+  color: #080;
+}
+
+span.css-string {
+  color: #00f;
+}
