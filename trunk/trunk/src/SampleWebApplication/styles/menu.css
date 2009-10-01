@@ -1,0 +1,27 @@
+.navbar {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 2em;
+  left: 1em;
+  width: 9em;
+  font-family: arial;
+}
+.navbar li {
+  background: white;
+  margin: 0.5em 0;
+  border: 2px solid #800;
+  border-right: 1em solid #800;
+  font-weight: bold;
+}
+.navbar a {
+  text-decoration: none;
+  color: #800;
+  display: block;
+  padding: 0.3em;
+}
+.navbar a:hover {
+  color: red;
+  background-color: #efefef;
+}
