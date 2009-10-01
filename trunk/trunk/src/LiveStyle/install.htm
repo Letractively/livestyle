@@ -8,7 +8,7 @@
 	    <p>Say goodbye to "Alt-Tab, F5" RSI!</p>
 	    <p>
 	        Add this link to your favorites/bookmarks:<br />
-	        <a style="font-size: 20pt; font-weight: bold" href="javascript:(function(){var script = document.createElement('script'); script.src = '$path?resource=target.js'; script.onload=script.onreadystatechange = function() { if ( !this.readyState || this.readyState == 'loaded' || this.readyState == 'complete' ) { LiveStyle.open(); } }; document.getElementsByTagName('body')[0].appendChild(script); })();">Live Style</a>
+	        <a style="font-size: 20pt; font-weight: bold" href="javascript:(function() { if (typeof(LiveStyle) === 'object' && LiveStyle.open) { LiveStyle.open(); } else { var script = document.createElement('script'); script.src = '$path?resource=target.js'; script.onload = script.onreadystatechange = function() { if(!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete') { LiveStyle.open(); } }; document.getElementsByTagName('body')[0].appendChild(script); }})();">Live Style</a>
 	    </p>
 	</body>
 </html>
