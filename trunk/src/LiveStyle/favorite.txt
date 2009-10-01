@@ -1,9 +1,13 @@
 ﻿// Create a favorite with the following:
 javascript:(function() {
-	var script = document.createElement('script'); 
-	script.src = '$path?resource=target.js'; 
-	script.onload = script.onreadystatechange = function() { 
-		if(!this.readyState || this.readyState == "loaded" || this.readyState == "complete") { LiveStyle.open(); } 
-	};
-	document.getElementsByTagName('body')[0].appendChild(script); 
+	if (LiveStyle && LiveStyle.open) { 
+		LiveStyle.open();
+	} else {
+		var script = document.createElement('script'); 
+		script.src = '$path?resource=target.js'; 
+		script.onload = script.onreadystatechange = function() { 
+			if(!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete') { LiveStyle.open(); } 
+		};
+		document.getElementsByTagName('body')[0].appendChild(script); 
+	}
 })();
