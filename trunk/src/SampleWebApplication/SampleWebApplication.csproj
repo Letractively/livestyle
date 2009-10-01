@@ -55,6 +55,7 @@
   <ItemGroup>
     <Content Include="index.htm" />
     <Content Include="styles\Default.css" />
+    <Content Include="styles\menu.css" />
     <Content Include="sub\test.htm" />
     <Content Include="Web.config" />
   </ItemGroup>

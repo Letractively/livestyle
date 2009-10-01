@@ -1,12 +1,4 @@
-﻿var select, save, status;
-var currentCssFile;
-var editor;
-
-function assignUI() {
-    select = $('select');
-    save = $('#save');
-    status = $('#status');
-}
+﻿var select, currentCssFile, editor;
 
 function addStylesheetsToSelect() {
     var links = $('link[type=text/css]', window.opener.document);
@@ -49,20 +41,24 @@ function openersPath() {
     return path.substr(0, index + 1);
 }
 
+function resolvePath(path) {
+    return (path.charAt(0) == '/') ? path : (openersPath() + path);
+}
+
 function loadCss() {
     var file = select.val();
-    file = (file.charAt(0) == '/') ? file : (openersPath() + file);
+    currentCssFile = file;
+    file = resolvePath(file);
     $.get(window.location.pathname, { file: file, force: new Date().getTime() }, function(css) {
         editor.setCode(css);
-        currentCssFile = file;
     });
 }
 
 function saveCss() {
-    status.text('Saving...').fadeIn();
+    $('#status').text('Saving...').fadeIn();
 
     var url = window.location.toString().match(/^(.*)\?|$/)[1];
-    var file = (currentCssFile.charAt(0) == '/') ? currentCssFile : (openersPath() + currentCssFile);
+    var file = resolvePath(currentCssFile);
     $.ajax({
         type: 'post',
         url: url + '?file=' + file,
@@ -73,8 +69,8 @@ function saveCss() {
                 link.attr('href', currentCssFile + '?' + new Date().getTime());
             }
 
-            status.text('Saved.');
-            setTimeout(function() { status.fadeOut(); }, 1000);
+            $('#status').text('Saved.');
+            setTimeout(function() { $('#status').fadeOut(); }, 1000);
         }
     });
 }
@@ -89,14 +85,14 @@ $(function() {
         textWrapping: false,
         saveFunction: saveCss,
         initCallback: function() {
-            assignUI();
+            select = $('select');
             addStylesheetsToSelect();
             resizeEditor();
             positionWindows();
             attachOpenerUnloadToClose();
 
             select.change(loadCss);
-            save.click(saveCss);
+            $('#save').click(saveCss);
             $(window).resize(resizeEditor);
 
             if (select.val()) {
