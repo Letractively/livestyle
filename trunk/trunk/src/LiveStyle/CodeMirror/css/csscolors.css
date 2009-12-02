@@ -1,8 +1,8 @@
 .editbox {
   margin: .4em;
   padding: 0;
-  font-family: Consolas, 'Lucida Console', 'Courier New', monospace;
-  font-size: 12pt;
+  font-family: monospace;
+  font-size: 10pt;
   color: black;
 }
 
@@ -19,19 +19,15 @@ span.css-at {
 }
 
 span.css-unit {
-  color: #00f;
+  color: #228811;
 }
 
 span.css-value {
-  color: #00f;
+  color: #770088;
 }
 
 span.css-identifier {
-  color: #800;
-}
-
-span.css-property {
-  color: Red;
+  color: black;
 }
 
 span.css-important {
@@ -39,13 +35,13 @@ span.css-important {
 }
 
 span.css-colorcode {
-  color: #00f;
+  color: #004499;
 }
 
 span.css-comment {
-  color: #080;
+  color: #AA7700;
 }
 
 span.css-string {
-  color: #00f;
+  color: #AA2222;
 }
