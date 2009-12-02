@@ -31,7 +31,7 @@ namespace LiveStyle
             }
         }
 
-        static void ProcessCssRequest(HttpContext context, string cssFilename)
+        void ProcessCssRequest(HttpContext context, string cssFilename)
         {
             cssFilename = cssFilename.Substring(context.Request.ApplicationPath.TrimEnd('/').Length);
 
@@ -50,18 +50,23 @@ namespace LiveStyle
             return context.Request.HttpMethod.Equals("post", StringComparison.OrdinalIgnoreCase);
         }
 
-        static void SaveCssFile(HttpContext context, string cssFilename)
+        void SaveCssFile(HttpContext context, string cssFilename)
         {
             using (var reader = new StreamReader(context.Request.InputStream))
             {
                 var css = reader.ReadToEnd();
-                File.WriteAllText(context.Server.MapPath("~/" + cssFilename), css);
+                File.WriteAllText(TransformCssFilename(context, cssFilename), css);
             }
         }
 
-        static void OutputCssFile(HttpContext context, string cssFilename)
+        protected virtual string TransformCssFilename(HttpContext context, string cssFilename)
         {
-            var filename = context.Server.MapPath("~/" + cssFilename);
+            return context.Server.MapPath("~/" + cssFilename);
+        }
+
+        void OutputCssFile(HttpContext context, string cssFilename)
+        {
+            var filename = TransformCssFilename(context, cssFilename);
             if (File.Exists(filename))
             {
                 context.Response.TransmitFile(filename);
